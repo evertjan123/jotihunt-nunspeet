@@ -11,7 +11,13 @@ import {
   foxtrotSightingMarker,
 } from "../MapIcons";
 
-export const SightingMarkerLayer: FC = () => {
+interface ISightingMarkerLayerProps {
+  filters: number[];
+}
+
+export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
+  props: ISightingMarkerLayerProps
+) => {
   const [sighting, setSighting] = useState<Sighting[]>([]);
 
   useEffect(() => {
@@ -26,38 +32,41 @@ export const SightingMarkerLayer: FC = () => {
   return (
     <>
       {sighting.map((sighting) => {
-        let marker;
+        if (props.filters.includes(sighting.area_id)) {
+          let marker;
 
-        switch (sighting.area_id) {
-          case 1:
-            marker = alphaSightingMarker;
-            break;
-          case 2:
-            marker = betaSightingMarker;
-            break;
-          case 3:
-            marker = charlieSightingMarker;
-            break;
-          case 4:
-            marker = deltaSightingMarker;
-            break;
-          case 5:
-            marker = echoSightingMarker;
-            break;
-          case 6:
-            marker = foxtrotSightingMarker;
-            break;
+          switch (sighting.area_id) {
+            case 1:
+              marker = alphaSightingMarker;
+              break;
+            case 2:
+              marker = betaSightingMarker;
+              break;
+            case 3:
+              marker = charlieSightingMarker;
+              break;
+            case 4:
+              marker = deltaSightingMarker;
+              break;
+            case 5:
+              marker = echoSightingMarker;
+              break;
+            case 6:
+              marker = foxtrotSightingMarker;
+              break;
+          }
+
+          return (
+            <Marker icon={marker} position={[sighting.lat, sighting.long]}>
+              <Popup>
+                <div className="flex flex-col text-center">
+                  <strong>Vos gespot</strong>
+                  <div>Gebied: {sighting.area.name}</div>
+                </div>
+              </Popup>
+            </Marker>
+          );
         }
-
-        return (
-          <Marker icon={marker} position={[sighting.lat, sighting.long]}>
-            <Popup>
-              <div className="flex flex-col text-center">
-                <strong>Vos gespot</strong>
-              </div>
-            </Popup>
-          </Marker>
-        );
       })}
     </>
   );
