@@ -41,3 +41,9 @@ export const foxtrotSightingMarker = L.icon({
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
   iconSize: [20, 36],
 });
+
+export const clubhouseSightingMarker = L.icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png",
+  iconSize: [16, 28],
+});

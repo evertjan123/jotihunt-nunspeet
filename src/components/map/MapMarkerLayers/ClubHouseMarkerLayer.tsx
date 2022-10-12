@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { getClubhouses } from "../../../API";
 import { Clubhouse } from "../../../types";
+import { clubhouseSightingMarker } from "../MapIcons";
 
 export const ClubHouseMarkerLayer: FC = () => {
   const [clubhouses, setClubhouses] = useState<Clubhouse[]>([]);
@@ -19,7 +20,10 @@ export const ClubHouseMarkerLayer: FC = () => {
     <>
       {clubhouses.map((home) => {
         return (
-          <Marker position={[home.lat, home.long]}>
+          <Marker
+            icon={clubhouseSightingMarker}
+            position={[home.lat, home.long]}
+          >
             <Popup>
               <div className="flex flex-col text-center">
                 <strong>{home.name}</strong>

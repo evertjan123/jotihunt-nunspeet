@@ -15,6 +15,11 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
   const [currentLocation, setCurrentLocation] = useState<
     UserLocation | undefined
   >();
+  const [urlLocation, setUrlLocation] = useState<UserLocation | undefined>();
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const urlLat = queryParams.get("lat");
+  const urlLong = queryParams.get("long");
 
   useEffect(() => {
     if (props.isOpen) {
@@ -29,9 +34,15 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
 
   useEffect(() => {
     getData();
+    if (urlLat && urlLong) {
+      setUrlLocation({
+        lat: Number(urlLat),
+        long: Number(urlLong),
+        accuracy: 0,
+      });
+    }
   }, []);
 
-  // sync storage and state
   // sync storage and state
   useEffect(() => {
     const interval = setInterval(() => {
@@ -102,7 +113,9 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block mb-2 text-sm font-medium">
-                  Jouwn locatie:
+                  {urlLocation
+                    ? "Jouwn geslecteerde coordinaten"
+                    : "jouwn live locatie"}
                 </label>
                 <label>Lat</label>
                 <input
@@ -110,8 +123,11 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   name="lat"
                   id="lat"
                   className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  value={currentLocation && currentLocation.lat}
-                  disabled={currentLocation && true}
+                  value={
+                    (urlLocation?.lat && urlLocation.lat) ||
+                    (currentLocation && currentLocation.lat)
+                  }
+                  disabled={(currentLocation || urlLocation) && true}
                 />
                 <label>long</label>
                 <input
@@ -119,8 +135,11 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   name="long"
                   id="long"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  value={currentLocation && currentLocation.long}
-                  disabled={currentLocation && true}
+                  value={
+                    (urlLocation?.long && urlLocation.long) ||
+                    (currentLocation && currentLocation.long)
+                  }
+                  disabled={(currentLocation || urlLocation) && true}
                 />
               </div>
 

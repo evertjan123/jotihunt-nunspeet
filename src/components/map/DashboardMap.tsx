@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { UserLocation } from "../../types";
 import { currentLocationMarker } from "./MapIcons";
 import { ClubHouseMarkerLayer } from "./MapMarkerLayers/ClubHouseMarkerLayer";
@@ -170,12 +170,11 @@ export const DashboardMap: FC = () => {
           </div>
         </div>
       ) : (
-        <div className="sm:w-[1000px] sm:h-[1000px] h-[80vh] w-screen px-2 m-auto">
+        <div className="sm:w-[1000px] sm:h-[1000px] h-[75vh] w-screen px-2 m-auto">
           <MapContainer
             center={[52.131527702721186, 5.849377035198454]}
             zoom={10}
             scrollWheelZoom={false}
-            className=""
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
