@@ -3,6 +3,8 @@ module.exports = {
   theme: {
     colors: {
       blue: "#1fb6ff",
+      joti: "#740001",
+      white: "#FFFFFF",
       purple: "#7e5bef",
       pink: "#ff49db",
       orange: "#ff7849",

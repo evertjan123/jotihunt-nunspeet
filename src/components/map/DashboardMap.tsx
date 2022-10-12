@@ -13,7 +13,7 @@ export const DashboardMap: FC<IDashboardMapProps> = (
   props: IDashboardMapProps
 ) => {
   return (
-    <div className="sm:w-[1000px] sm:h-[1000px] h-screen w-screen p-2 m-auto">
+    <div className="sm:w-[1000px] sm:h-[1000px] h-[94vh] w-screen p-2 m-auto">
       <MapContainer
         center={[52.131527702721186, 5.849377035198454]}
         zoom={10}

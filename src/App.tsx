@@ -1,16 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import { Header } from "./components/Header/Header";
+import { DashboardMap } from "./components/map/DashboardMap";
 import { Dashboard } from "./pages/Dashboard";
+import { Home } from "./pages/Home";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
+      <Header />
+
       <Routes>
-        <Route path="/" element={<Dashboard />}>
-          <Route path="dashboard" element={<Dashboard />} />
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/map" element={<DashboardMap />} />
+        <Route path="dashboard" element={<Dashboard />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
