@@ -55,10 +55,10 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
     <div
       className={`${
         props.isOpen ? "absolute" : "hidden"
-      } left-0 top-0 right-0 pt-32 mb-screen overflow-hidden bg-[#AAAAAA80] bottom-0 h-full h-screen w-full`}
+      } left-0 top-0 right-0 pt-32 mb-screen overflow-hidden bg-[#AAAAAA80] bottom-0 h-full h-screen w-full `}
     >
-      <div className="relative p-4 w-full max-w-md h-full md:h-auto">
-        <div className="relative rounded-lg shadow bg-gray">
+      <div className="relative p-4 w-full max-w-md h-full md:h-auto flex flex-col bg-bg_main m-auto py-5 px-5 rounded">
+        <div className="relative rounded-lg  !z-40 shadow bg-gray">
           <div
             className="absolute top-3 right-2.5  bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center cursor-pointer"
             onClick={() => props.onClose()}
@@ -78,7 +78,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
             </svg>
             <span className="sr-only">Close modal</span>
           </div>
-          <div className="py-6 px-6 lg:px-8">
+          <div className="py-6 px-6  lg:px-8">
             <h3 className="mb-4 text-xl font-medium">Vos gespot?</h3>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
@@ -146,13 +146,14 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   className="border  text-sm rounded-lg block w-full p-2.5"
                 />
               </div>
-
-              <button
-                type="submit"
-                className="w-full text-white bg-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Login to your account
-              </button>
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="w-3/5 text-white bg-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Geef vos aan
+                </button>
+              </div>
             </form>
           </div>
         </div>

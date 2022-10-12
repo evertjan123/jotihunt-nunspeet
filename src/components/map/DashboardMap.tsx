@@ -1,8 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { getAllSightings, getClubhouses } from "../../API";
-import { Clubhouse, UserLocation } from "../../types";
-import { currentLocationMarker, sightingMarker } from "./MapIcons";
+import { UserLocation } from "../../types";
+import { currentLocationMarker } from "./MapIcons";
+import { ClubHouseMarkerLayer } from "./MapMarkerLayers/ClubHouseMarkerLayer";
+import { SightingMarkerLayer } from "./MapMarkerLayers/SightingsMarkerLayer";
 
 interface IDashboardMapProps {
   currentLocation?: UserLocation;
@@ -11,24 +12,8 @@ interface IDashboardMapProps {
 export const DashboardMap: FC<IDashboardMapProps> = (
   props: IDashboardMapProps
 ) => {
-  const [clubhouses, setClubhouses] = useState<Clubhouse[]>([]);
-  const [sighting, setSighting] = useState<Clubhouse[]>([]);
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    const clubhouses = await getClubhouses();
-    setClubhouses(clubhouses);
-
-    const sightings = await getAllSightings();
-    console.log(sighting);
-    setSighting(sightings);
-  };
-
   return (
-    <div className="sm:w-[1000px] sm:h-[1000px] h-96 w-96 m-auto">
+    <div className="sm:w-[1000px] sm:h-[1000px] h-screen w-screen p-2 m-auto">
       <MapContainer
         center={[52.131527702721186, 5.849377035198454]}
         zoom={10}
@@ -48,8 +33,8 @@ export const DashboardMap: FC<IDashboardMapProps> = (
               <div className="flex flex-col text-center">
                 <strong>Dit ben jij</strong>
                 <div>
-                  Lat: {props.currentLocation.lat.toFixed(2)}, Long:{" "}
-                  {props.currentLocation.long.toFixed(2)}
+                  Lat: {props.currentLocation.lat.toFixed(4)}, Long:{" "}
+                  {props.currentLocation.long.toFixed(4)}
                 </div>
                 <div>
                   Nauwkeuringheid: {props.currentLocation.accuracy.toFixed(2)}
@@ -58,39 +43,8 @@ export const DashboardMap: FC<IDashboardMapProps> = (
             </Popup>
           </Marker>
         )}
-        {clubhouses.map((home) => {
-          return (
-            <Marker position={[home.lat, home.long]}>
-              <Popup>
-                <div className="flex flex-col text-center">
-                  <strong>{home.name}</strong>
-                  <div>
-                    {home.street} {home.housenumber}
-                    {home.housenumber_addition && home.housenumber_addition}
-                  </div>
-                  <div>
-                    {home.postcode} {home.city}
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
-
-        {sighting.map((sighting) => {
-          return (
-            <Marker
-              icon={sightingMarker}
-              position={[sighting.lat, sighting.long]}
-            >
-              <Popup>
-                <div className="flex flex-col text-center">
-                  <strong>Vos gespot</strong>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
+        <ClubHouseMarkerLayer />
+        <SightingMarkerLayer />
       </MapContainer>
     </div>
   );
