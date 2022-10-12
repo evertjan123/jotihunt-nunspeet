@@ -5,13 +5,8 @@ import { currentLocationMarker } from "./MapIcons";
 import { ClubHouseMarkerLayer } from "./MapMarkerLayers/ClubHouseMarkerLayer";
 import { SightingMarkerLayer } from "./MapMarkerLayers/SightingsMarkerLayer";
 
-interface IDashboardMapProps {
-  currentLocation?: UserLocation;
-}
-
-export const DashboardMap: FC<IDashboardMapProps> = (
-  props: IDashboardMapProps
-) => {
+export const DashboardMap: FC = () => {
+  const currentLocation = JSON.parse(sessionStorage.getItem("currenLocation")!);
   return (
     <div className="sm:w-[1000px] sm:h-[1000px] h-[94vh] w-screen p-2 m-auto">
       <MapContainer
@@ -24,20 +19,20 @@ export const DashboardMap: FC<IDashboardMapProps> = (
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {props.currentLocation && (
+        {currentLocation && (
           <Marker
             icon={currentLocationMarker}
-            position={[props.currentLocation?.lat, props.currentLocation?.long]}
+            position={[currentLocation?.lat, currentLocation?.long]}
           >
             <Popup>
               <div className="flex flex-col text-center">
                 <strong>Dit ben jij</strong>
                 <div>
-                  Lat: {props.currentLocation.lat.toFixed(4)}, Long:{" "}
-                  {props.currentLocation.long.toFixed(4)}
+                  Lat: {currentLocation.lat.toFixed(4)}, Long:{" "}
+                  {currentLocation.long.toFixed(4)}
                 </div>
                 <div>
-                  Nauwkeuringheid: {props.currentLocation.accuracy.toFixed(2)}
+                  Nauwkeuringheid: {currentLocation.accuracy.toFixed(2)}
                 </div>
               </div>
             </Popup>

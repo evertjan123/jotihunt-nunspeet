@@ -46,7 +46,7 @@ export const Dashboard: FC = () => {
         <div>
           {!isSetSightingModalOpen && (
             <>
-              <DashboardMap currentLocation={currentLocation} />
+              <DashboardMap />
               <button
                 className="bg-blue px-6 py-3 rounded m-5"
                 onClick={() => setIsSetSightingModalOpen(true)}
