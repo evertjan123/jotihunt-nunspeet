@@ -23,7 +23,7 @@ export const DashboardMap: FC = () => {
   }, []);
 
   return (
-    <div className="sm:w-[1000px] sm:h-[1000px] h-[90vh] w-screen p-2 m-auto">
+    <div className="sm:w-[1000px] sm:h-[1000px] h-[85vh] w-screen p-2 pr-20 m-auto">
       <MapContainer
         center={[52.131527702721186, 5.849377035198454]}
         zoom={10}
