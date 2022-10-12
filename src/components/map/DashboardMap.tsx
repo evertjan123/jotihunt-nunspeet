@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { UserLocation } from "../../types";
 import { currentLocationMarker } from "./MapIcons";
@@ -6,9 +6,24 @@ import { ClubHouseMarkerLayer } from "./MapMarkerLayers/ClubHouseMarkerLayer";
 import { SightingMarkerLayer } from "./MapMarkerLayers/SightingsMarkerLayer";
 
 export const DashboardMap: FC = () => {
-  const currentLocation = JSON.parse(sessionStorage.getItem("currenLocation")!);
+  const [currentLocation, setCurrentLocation] = useState<
+    UserLocation | undefined
+  >();
+
+  // sync storage and state
+  useEffect(() => {
+    setCurrentLocation(
+      JSON.parse(localStorage.getItem("currentLocation")!) || []
+    );
+    window.addEventListener("storage", () => {
+      setCurrentLocation(
+        JSON.parse(localStorage.getItem("currenLocation")!) || []
+      );
+    });
+  }, []);
+
   return (
-    <div className="sm:w-[1000px] sm:h-[1000px] h-[94vh] w-screen p-2 m-auto">
+    <div className="sm:w-[1000px] sm:h-[1000px] h-[90vh] w-screen p-2 m-auto">
       <MapContainer
         center={[52.131527702721186, 5.849377035198454]}
         zoom={10}

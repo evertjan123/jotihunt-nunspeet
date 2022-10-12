@@ -26,7 +26,6 @@ export const Home: FC = () => {
         <SetSightingModal
           isOpen={isSetSightingModalOpen}
           onClose={() => setIsSetSightingModalOpen(false)}
-          location={JSON.parse(sessionStorage.getItem("currentLocation")!)}
         />
       </div>
     </>

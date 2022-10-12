@@ -9,26 +9,34 @@ import { Home } from "./pages/Home";
 function App() {
   let geolocation;
 
-  let MINUTE_MS = 60000;
+  let MINUTE_MS = 1000;
 
   useEffect(() => {
     getLocation();
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {}, MINUTE_MS);
+    const interval = setInterval(() => {
+      getLocation();
+    }, MINUTE_MS);
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
   const getLocation = () => {
     if (navigator.geolocation) {
-      geolocation = navigator.geolocation.watchPosition((position) => {
-        sessionStorage.setItem(
+      geolocation = navigator.geolocation.getCurrentPosition((position) => {
+        localStorage.setItem(
           "currentLocation",
           JSON.stringify({
             lat: position.coords.latitude,
             long: position.coords.longitude,
             accuracy: position.coords.accuracy,
+          })
+        );
+        localStorage.setItem(
+          "lastLocationUpdated",
+          JSON.stringify({
+            updated_At: position.timestamp,
           })
         );
       });

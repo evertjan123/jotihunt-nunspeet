@@ -5,13 +5,15 @@ import { Area, UserLocation } from "../../types";
 interface ISetSigtingModalProps {
   isOpen: boolean;
   onClose: (arg0?: any) => any;
-  location?: UserLocation;
 }
 
 export const SetSightingModal: FC<ISetSigtingModalProps> = (
   props: ISetSigtingModalProps
 ) => {
   const [areas, setAreas] = useState<Area[]>([]);
+  const [currentLocation, setCurrentLocation] = useState<
+    UserLocation | undefined
+  >();
 
   useEffect(() => {
     if (props.isOpen) {
@@ -26,6 +28,18 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
 
   useEffect(() => {
     getData();
+  }, []);
+
+  // sync storage and state
+  useEffect(() => {
+    setCurrentLocation(
+      JSON.parse(localStorage.getItem("currentLocation")!) || []
+    );
+    window.addEventListener("storage", () => {
+      setCurrentLocation(
+        JSON.parse(localStorage.getItem("currentLocation")!) || []
+      );
+    });
   }, []);
 
   const getData = async () => {
@@ -55,7 +69,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
     <div
       className={`${
         props.isOpen ? "absolute" : "hidden"
-      } left-0 top-0 right-0 pt-32 mb-screen overflow-hidden bg-[#AAAAAA80] bottom-0 h-full h-screen w-full `}
+      } left-0 top-0 right-0 mb-screen overflow-hidden bg-[#AAAAAA80] bottom-0 h-full h-screen w-full`}
     >
       <div className="relative p-4 w-full max-w-md h-full md:h-auto flex flex-col bg-bg_main m-auto py-5 px-5 rounded">
         <div className="relative rounded-lg  !z-40 shadow bg-gray">
@@ -91,8 +105,8 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   name="lat"
                   id="lat"
                   className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  value={props.location && props.location.lat}
-                  disabled={props.location && true}
+                  value={currentLocation && currentLocation.lat}
+                  disabled={currentLocation && true}
                 />
                 <label>long</label>
                 <input
@@ -100,8 +114,8 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   name="long"
                   id="long"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  value={props.location && props.location.long}
-                  disabled={props.location && true}
+                  value={currentLocation && currentLocation.long}
+                  disabled={currentLocation && true}
                 />
               </div>
 
