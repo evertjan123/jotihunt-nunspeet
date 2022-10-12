@@ -12,7 +12,8 @@ export const Header: FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       const today = new Date();
-      const time = today.getHours() + ":" + today.getMinutes();
+      const mins = ("0" + today.getMinutes()).slice(-2);
+      const time = today.getHours() + ":" + mins;
       setTime(time);
     }, 60 * 1000);
     return () => {

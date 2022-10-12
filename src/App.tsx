@@ -24,22 +24,28 @@ function App() {
 
   const getLocation = () => {
     if (navigator.geolocation) {
-      geolocation = navigator.geolocation.getCurrentPosition((position) => {
-        localStorage.setItem(
-          "currentLocation",
-          JSON.stringify({
-            lat: position.coords.latitude,
-            long: position.coords.longitude,
-            accuracy: position.coords.accuracy,
-          })
-        );
-        localStorage.setItem(
-          "lastLocationUpdated",
-          JSON.stringify({
-            updated_At: position.timestamp,
-          })
-        );
-      });
+      geolocation = navigator.geolocation.getCurrentPosition(
+        (position) => {
+          localStorage.setItem(
+            "currentLocation",
+            JSON.stringify({
+              lat: position.coords.latitude,
+              long: position.coords.longitude,
+              accuracy: position.coords.accuracy,
+            })
+          );
+          localStorage.setItem(
+            "lastLocationUpdated",
+            JSON.stringify({
+              updated_At: position.timestamp,
+            })
+          );
+        },
+        (error) => {
+          console.log(error);
+        },
+        { enableHighAccuracy: true }
+      );
     } else {
       console.log("Geolocation is not supported by this browser.");
     }

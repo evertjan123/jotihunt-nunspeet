@@ -10,6 +10,7 @@ interface ISetSigtingModalProps {
 export const SetSightingModal: FC<ISetSigtingModalProps> = (
   props: ISetSigtingModalProps
 ) => {
+  const [error, setError] = useState<string>("");
   const [areas, setAreas] = useState<Area[]>([]);
   const [currentLocation, setCurrentLocation] = useState<
     UserLocation | undefined
@@ -52,17 +53,22 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
     console.log(event.target.area.value);
     // check if values are filled
     if (event.target.lat.value && event.target.long.value) {
-      // create sighting
-      const response = await postSighting({
-        description: event.target.description.value ?? null,
-        lat: event.target.lat.value,
-        long: event.target.long.value,
-        optional_name: event.target.optional_name.value ?? null,
-        hunter_id: null,
-        area_id: event.target.area.value,
-      });
+      if (event.target.area.value !== "-1") {
+        setError("");
+        // create sighting
+        const response = await postSighting({
+          description: event.target.description.value ?? null,
+          lat: event.target.lat.value,
+          long: event.target.long.value,
+          optional_name: event.target.optional_name.value ?? null,
+          hunter_id: null,
+          area_id: event.target.area.value,
+        });
+        props.onClose();
+      } else {
+        setError("Kies een gebied");
+      }
     }
-    props.onClose();
   };
 
   return (
@@ -127,7 +133,9 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   id="area"
                   className="border text-sm rounded-lg block w-full p-2.5"
                 >
-                  <option selected>Kies een gebied</option>
+                  <option selected value={-1}>
+                    Kies een gebied
+                  </option>
                   {areas.map((area) => {
                     return <option value={area.id}>{area.name}</option>;
                   })}
@@ -160,10 +168,11 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   className="border  text-sm rounded-lg block w-full p-2.5"
                 />
               </div>
+              <div className="text-center font-bold	text-joti">{error}</div>
               <div className="text-center">
                 <button
                   type="submit"
-                  className="w-3/5 text-white bg-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="w-3/5 text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   Geef vos aan
                 </button>
