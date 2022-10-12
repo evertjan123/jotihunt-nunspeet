@@ -6,7 +6,7 @@ export const Home: FC = () => {
     useState<boolean>(false);
   return (
     <>
-      <div className="flex flex-col m-auto w-96">
+      <div className="flex flex-col m-auto w-80">
         <a href="./map" className="bg-blue px-6 py-3 text-center rounded m-5">
           <button>Ga naar kaart</button>
         </a>
