@@ -30,3 +30,15 @@ export type Area = {
   status: string;
   updated_at: string;
 };
+
+export type Sighting = {
+  id: number;
+  description: string;
+  lat: number;
+  long: number;
+  optional_name: string | undefined;
+  hunter_id: number | undefined;
+  area_id: number;
+  area: Area;
+  created_at: string;
+};

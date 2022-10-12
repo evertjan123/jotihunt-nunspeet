@@ -32,15 +32,14 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
   }, []);
 
   // sync storage and state
+  // sync storage and state
   useEffect(() => {
-    setCurrentLocation(
-      JSON.parse(localStorage.getItem("currentLocation")!) || []
-    );
-    window.addEventListener("storage", () => {
+    const interval = setInterval(() => {
       setCurrentLocation(
         JSON.parse(localStorage.getItem("currentLocation")!) || []
       );
-    });
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const getData = async () => {

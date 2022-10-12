@@ -7,8 +7,6 @@ import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
 
 function App() {
-  let geolocation;
-
   let MINUTE_MS = 1000;
 
   useEffect(() => {
@@ -24,9 +22,9 @@ function App() {
 
   const getLocation = () => {
     if (navigator.geolocation) {
-      geolocation = navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
-          localStorage.setItem(
+          window.localStorage.setItem(
             "currentLocation",
             JSON.stringify({
               lat: position.coords.latitude,
@@ -34,7 +32,7 @@ function App() {
               accuracy: position.coords.accuracy,
             })
           );
-          localStorage.setItem(
+          window.localStorage.setItem(
             "lastLocationUpdated",
             JSON.stringify({
               updated_At: position.timestamp,
