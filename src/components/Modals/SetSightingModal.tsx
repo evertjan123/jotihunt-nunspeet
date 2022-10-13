@@ -6,6 +6,7 @@ import { Area, UserLocation } from "../../types";
 interface ISetSigtingModalProps {
   isOpen: boolean;
   onClose: (arg0?: any) => any;
+  manualInput: boolean;
 }
 
 export const SetSightingModal: FC<ISetSigtingModalProps> = (
@@ -98,7 +99,10 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
         <div className="relative rounded-lg  !z-40 shadow bg-gray">
           <div
             className="absolute top-3 right-2.5  bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center cursor-pointer"
-            onClick={() => props.onClose()}
+            onClick={() => {
+              props.onClose();
+              navigate("./");
+            }}
           >
             <svg
               aria-hidden="true"
@@ -120,7 +124,9 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block mb-2 text-sm font-medium">
-                  {urlLocation
+                  {props.manualInput
+                    ? "Vul hier je coordinaten in"
+                    : urlLocation
                     ? "Jouwn geslecteerde coordinaten"
                     : "jouwn live locatie"}
                 </label>
@@ -131,10 +137,16 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   id="lat"
                   className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   value={
-                    (urlLocation?.lat && urlLocation.lat) ||
-                    (currentLocation && currentLocation.lat)
+                    props.manualInput
+                      ? ""
+                      : (urlLocation?.lat && urlLocation.lat) ||
+                        (currentLocation && currentLocation.lat)
                   }
-                  disabled={(currentLocation || urlLocation) && true}
+                  disabled={
+                    props.manualInput
+                      ? false
+                      : (currentLocation || urlLocation) && true
+                  }
                 />
                 <label>long</label>
                 <input
@@ -143,10 +155,16 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   id="long"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   value={
-                    (urlLocation?.long && urlLocation.long) ||
-                    (currentLocation && currentLocation.long)
+                    props.manualInput
+                      ? ""
+                      : (urlLocation?.long && urlLocation.long) ||
+                        (currentLocation && currentLocation.long)
                   }
-                  disabled={(currentLocation || urlLocation) && true}
+                  disabled={
+                    props.manualInput
+                      ? false
+                      : (currentLocation || urlLocation) && true
+                  }
                 />
               </div>
 

@@ -4,7 +4,7 @@ import { SetSightingModal } from "../components/Modals/SetSightingModal";
 export const Home: FC = () => {
   const [isSetSightingModalOpen, setIsSetSightingModalOpen] =
     useState<boolean>(false);
-
+  const [isManuel, setIsManual] = useState<boolean>(false);
   const queryParams = new URLSearchParams(window.location.search);
   const queryIsModalOpen = queryParams.get("isModalOpen");
   useEffect(() => {
@@ -16,25 +16,42 @@ export const Home: FC = () => {
   return (
     <>
       <div className="flex flex-col m-auto w-80">
-        <a href="./map" className="bg-blue px-6 py-3 text-center rounded m-5">
+        <a
+          href="./map"
+          className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+        >
           <button>Ga naar kaart</button>
         </a>
         <button
-          className="bg-blue px-6 py-3 text-center rounded m-5"
+          className="bg-joti text-white px-6 py-3 text-center rounded m-5"
           onClick={() => {
+            setIsManual(false);
             setIsSetSightingModalOpen(true);
           }}
         >
-          Meld een vos
+          Meld een vos via locatie
         </button>
-        <a href="./map" className="bg-blue px-6 py-3 text-center rounded m-5">
+        <button
+          className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+          onClick={() => {
+            setIsManual(true);
+            setIsSetSightingModalOpen(true);
+          }}
+        >
+          Meld een vos handmatig
+        </button>
+        {/* <a
+          href="./map"
+          className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+        >
           <button>Lezen</button>
-        </a>{" "}
+        </a>{" "} */}
       </div>
       <div className="flex justify-center">
         <SetSightingModal
           isOpen={isSetSightingModalOpen}
           onClose={() => setIsSetSightingModalOpen(false)}
+          manualInput={isManuel}
         />
       </div>
     </>

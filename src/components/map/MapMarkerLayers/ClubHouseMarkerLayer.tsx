@@ -4,18 +4,12 @@ import { getClubhouses } from "../../../API";
 import { Clubhouse } from "../../../types";
 import {
   alphaClubhouseMarker,
-  alphaSightingMarker,
   betaClubhouseMarker,
   betaSightingMarker,
   charlieClubhouseMarker,
-  charlieSightingMarker,
-  clubhouseSightingMarker,
   deltaClubhouseMarker,
-  deltaSightingMarker,
   echoClubhouseMarker,
-  echoSightingMarker,
   foxtrotClubhouseMarker,
-  foxtrotSightingMarker,
 } from "../MapIcons";
 
 export const ClubHouseMarkerLayer: FC = () => {
@@ -23,6 +17,15 @@ export const ClubHouseMarkerLayer: FC = () => {
 
   useEffect(() => {
     getData();
+  }, []);
+
+  let MINUTE_MS = 20000;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getData();
+    }, MINUTE_MS);
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
   const getData = async () => {
@@ -58,15 +61,26 @@ export const ClubHouseMarkerLayer: FC = () => {
           <Marker icon={marker} position={[home.lat, home.long]}>
             <Popup>
               <div className="flex flex-col text-center">
-                <strong>{home.name}</strong>
-                <div>
-                  {home.street} {home.housenumber}
-                  {home.housenumber_addition && home.housenumber_addition}
+                <div className="pb-2">
+                  <strong>{home.name}</strong>
+                  <div>
+                    {home.street} {home.housenumber}
+                    {home.housenumber_addition && home.housenumber_addition}
+                  </div>
+                  <div>
+                    {home.postcode} {home.city}
+                  </div>
                 </div>
-                <div>
-                  {home.postcode} {home.city}
+                <hr />
+                <div className="pt-2">
+                  <div>Gebied: {home.area.toLocaleLowerCase()}</div>
+                  <div>
+                    Punten voor foto opdrachten:
+                    {home.photo_assignment_points
+                      ? home.photo_assignment_points
+                      : 0}
+                  </div>
                 </div>
-                <div>Gebied: {home.area.toLocaleLowerCase()}</div>
               </div>
             </Popup>
           </Marker>

@@ -28,7 +28,15 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
 
   useEffect(() => {
     getData();
-    sighting.pop();
+  }, []);
+
+  let MINUTE_MS = 8000;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getData();
+    }, MINUTE_MS);
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
   const getData = async () => {
@@ -48,6 +56,13 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
       }
     },
   });
+
+  let alphaCount: number = 0,
+    betaCount: number = 0,
+    charlieCount: number = 0,
+    deltaCount: number = 0,
+    echoCount: number = 0,
+    foxtrotCount: number = 0;
 
   return (
     <>
@@ -92,59 +107,102 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
         </Marker>
       )}
       <SightingsPolylineLayer sightings={sighting} filters={props.filters} />;
-      {sighting.map((sight) => {
-        if (props.filters.includes(sight.area_id)) {
-          let marker;
-          switch (sight.area_id) {
-            case 1:
-              marker = alphaSightingMarker;
-              break;
-            case 2:
-              marker = betaSightingMarker;
-              break;
-            case 3:
-              marker = charlieSightingMarker;
-              break;
-            case 4:
-              marker = deltaSightingMarker;
-              break;
-            case 5:
-              marker = echoSightingMarker;
-              break;
-            case 6:
-              marker = foxtrotSightingMarker;
-              break;
-          }
+      {sighting
+        .slice(0)
+        .reverse()
+        .map((sight) => {
+          if (props.filters.includes(sight.area_id)) {
+            let marker;
+            switch (sight.area_id) {
+              case 1:
+                marker = alphaSightingMarker;
+                alphaCount++;
+                break;
+              case 2:
+                marker = betaSightingMarker;
+                betaCount++;
+                break;
+              case 3:
+                marker = charlieSightingMarker;
+                charlieCount++;
+                break;
+              case 4:
+                marker = deltaSightingMarker;
+                deltaCount++;
+                break;
+              case 5:
+                marker = echoSightingMarker;
+                echoCount++;
+                break;
+              case 6:
+                marker = foxtrotSightingMarker;
+                foxtrotCount++;
+                break;
+            }
 
-          return (
-            <Marker icon={marker} position={[sight.lat, sight.long]}>
-              <Popup>
-                <div className="flex flex-col text-center">
-                  <strong>Vos gespot</strong>
-                  <div>Gebied: {sight.area.name}</div>
-                  <div>
-                    Gespot op: {new Date(sight.created_at).toLocaleString()}
+            if (sight.area_id === 1 && alphaCount > 7) {
+              return <></>;
+            }
+            if (sight.area_id === 2 && betaCount > 7) {
+              return <></>;
+            }
+            if (sight.area_id === 3 && charlieCount > 7) {
+              return <></>;
+            }
+            if (sight.area_id === 4 && deltaCount > 7) {
+              return <></>;
+            }
+            if (sight.area_id === 5 && echoCount > 7) {
+              return <></>;
+            }
+            if (sight.area_id === 6 && foxtrotCount > 7) {
+              return <></>;
+            }
+
+            return (
+              <Marker icon={marker} position={[sight.lat, sight.long]}>
+                <Popup>
+                  <div className="flex flex-col text-center">
+                    <strong className="text-lg pb-2">Vos gespot</strong>
+                    <div>Gebied: {sight.area.name}</div>
+                    <div className="pb-2">
+                      Gespot op: {new Date(sight.created_at).toLocaleString()}
+                    </div>
+                    {(sight.description || sight.optional_name) && (
+                      <>
+                        <hr />
+                        <div className="pt-2">{sight.description} </div>
+                        <div>
+                          {sight.optional_name
+                            ? "Gespot door " + sight.optional_name
+                            : ""}
+                        </div>
+                      </>
+                    )}
+                    <hr />
+                    <div className="py-2">
+                      lat: {sight.lat.toString().slice(0, 7)} long:{" "}
+                      {sight.long.toString().slice(0, 7)}
+                    </div>
+                    <button
+                      className="text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center"
+                      onClick={() => {
+                        deleteSighting(sight.id);
+                        setSighting(
+                          sighting.filter((e) => {
+                            return e.id !== sight.id;
+                          })
+                        );
+                      }}
+                    >
+                      Verwijder marker
+                    </button>
                   </div>
-                  <button
-                    className="text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center"
-                    onClick={() => {
-                      deleteSighting(sight.id);
-                      setSighting(
-                        sighting.filter((e) => {
-                          console.log(e);
-                          return e.id !== sight.id;
-                        })
-                      );
-                    }}
-                  >
-                    Verwijder marker
-                  </button>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        }
-      })}
+                </Popup>
+              </Marker>
+            );
+          }
+        })}
     </>
   );
 };
