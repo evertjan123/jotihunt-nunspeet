@@ -34,6 +34,14 @@ export const getAllSightings = async () => {
     return response.data.data;
   }
 };
+
+export const deleteSighting = async (id: number) => {
+  const response = await instance.get("/sightings/delete/" + id);
+  if (response.status === 200) {
+    return response.data.data;
+  }
+};
+
 /**
  * POST
  */

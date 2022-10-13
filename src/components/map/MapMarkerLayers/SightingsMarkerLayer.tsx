@@ -1,7 +1,7 @@
 import { LatLng } from "leaflet";
 import { FC, useEffect, useRef, useState } from "react";
-import { Marker, Popup, Tooltip, useMapEvents } from "react-leaflet";
-import { getAllSightings } from "../../../API";
+import { Marker, Polyline, Popup, Tooltip, useMapEvents } from "react-leaflet";
+import { deleteSighting, getAllSightings } from "../../../API";
 import { Sighting } from "../../../types";
 import {
   alphaSightingMarker,
@@ -11,6 +11,7 @@ import {
   echoSightingMarker,
   foxtrotSightingMarker,
 } from "../MapIcons";
+import { SightingsPolylineLayer } from "./SightingsPolylineLayer";
 
 interface ISightingMarkerLayerProps {
   filters: number[];
@@ -23,8 +24,11 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
 
   const [newSighting, setNewSighting] = useState<LatLng>();
 
+  const [closeTooltip, setCloseTooltip] = useState<boolean>(false);
+
   useEffect(() => {
     getData();
+    sighting.pop();
   }, []);
 
   const getData = async () => {
@@ -34,8 +38,14 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
 
   const map = useMapEvents({
     click(e) {
-      const newMarker = e.latlng;
-      setNewSighting(newMarker);
+      if (!newSighting) {
+        const newMarker = e.latlng;
+        setNewSighting(newMarker);
+      }
+      if (closeTooltip) {
+        setNewSighting(undefined);
+        setCloseTooltip(false);
+      }
     },
   });
 
@@ -43,25 +53,49 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
     <>
       {newSighting && (
         <Marker position={newSighting} draggable={false}>
-          <Tooltip permanent interactive className="absolute z-999">
-            <div className="flex flex-col text-center cursor-pointer z-99999">
-              <div>Spot een vos!</div>
-              <a
-                href={`./?isModalOpen=true&lat=${newSighting.lat}&long=${newSighting.lng}`}
+          <Tooltip permanent interactive className="absolute">
+            <div className="flex flex-row text-center cursor-pointer z-99999">
+              <div className="flex flex-col">
+                <div className="pt-1.5 px-7">Spot een vos!</div>
+
+                <a
+                  href={`./?isModalOpen=true&lat=${newSighting.lat}&long=${newSighting.lng}`}
+                >
+                  <button className="text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center">
+                    Klik hier
+                  </button>
+                </a>
+              </div>
+              <div
+                className="top-3 right-2.5  bg-transparent rounded-lg text-sm p-1.5 cursor-pointer"
+                onClick={() => {
+                  setCloseTooltip(true);
+                }}
               >
-                <button className="text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center">
-                  Klik hier
-                </button>
-              </a>
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span className="sr-only">Close modal</span>
+              </div>
             </div>
           </Tooltip>
         </Marker>
       )}
-      {sighting.map((sighting) => {
-        if (props.filters.includes(sighting.area_id)) {
+      <SightingsPolylineLayer sightings={sighting} filters={props.filters} />;
+      {sighting.map((sight) => {
+        if (props.filters.includes(sight.area_id)) {
           let marker;
-
-          switch (sighting.area_id) {
+          switch (sight.area_id) {
             case 1:
               marker = alphaSightingMarker;
               break;
@@ -83,11 +117,28 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
           }
 
           return (
-            <Marker icon={marker} position={[sighting.lat, sighting.long]}>
+            <Marker icon={marker} position={[sight.lat, sight.long]}>
               <Popup>
                 <div className="flex flex-col text-center">
                   <strong>Vos gespot</strong>
-                  <div>Gebied: {sighting.area.name}</div>
+                  <div>Gebied: {sight.area.name}</div>
+                  <div>
+                    Gespot op: {new Date(sight.created_at).toLocaleString()}
+                  </div>
+                  <button
+                    className="text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center"
+                    onClick={() => {
+                      deleteSighting(sight.id);
+                      setSighting(
+                        sighting.filter((e) => {
+                          console.log(e);
+                          return e.id !== sight.id;
+                        })
+                      );
+                    }}
+                  >
+                    Verwijder marker
+                  </button>
                 </div>
               </Popup>
             </Marker>

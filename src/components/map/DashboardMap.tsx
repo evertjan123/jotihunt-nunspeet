@@ -11,7 +11,7 @@ export const DashboardMap: FC = () => {
   >();
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
-  const [showClubHouses, setShowClubHouses] = useState<boolean>(false);
+  const [showClubHouses, setShowClubHouses] = useState<boolean>(true);
   const [selectedAreas, setSelectedAreas] = useState<number[]>([
     1, 2, 3, 4, 5, 6,
   ]);

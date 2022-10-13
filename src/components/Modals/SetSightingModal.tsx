@@ -1,4 +1,5 @@
 import { FC, FormEventHandler, useEffect, useState } from "react";
+import { useNavigate, useNavigation } from "react-router-dom";
 import { getAreas, postSighting } from "../../API";
 import { Area, UserLocation } from "../../types";
 
@@ -16,6 +17,8 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
     UserLocation | undefined
   >();
   const [urlLocation, setUrlLocation] = useState<UserLocation | undefined>();
+
+  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(window.location.search);
   const urlLat = queryParams.get("lat");
@@ -74,6 +77,10 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
           hunter_id: null,
           area_id: event.target.area.value,
         });
+        if (urlLat && urlLong) {
+          navigate("./map");
+        }
+
         props.onClose();
       } else {
         setError("Kies een gebied");

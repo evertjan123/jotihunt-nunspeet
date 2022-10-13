@@ -9,6 +9,7 @@ export type Clubhouse = {
   lat: number;
   long: number;
   photo_assignment_points: number | undefined;
+  area: string;
 };
 
 export type Article = {

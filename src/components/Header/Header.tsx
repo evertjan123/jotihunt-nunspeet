@@ -25,9 +25,9 @@ export const Header: FC = () => {
     <header className="sticky top-0 bg-joti">
       <div className="p-3 lg:px-24">
         <div className="flex place-content-between text-white">
-          <div className="cursor-pointer " onClick={() => history(-1)}>
-            🠔
-          </div>
+          <a className="cursor-pointer text-xl items-center" href="./">
+            {"<-"}
+          </a>
           <strong>Jotihunt Nunspeet 2022</strong>
           <div>{time}</div>
         </div>
