@@ -22,6 +22,7 @@ export const Home: FC = () => {
         >
           <button>Ga naar kaart</button>
         </a>
+        {!JSON.parse(localStorage.getItem("isLocationBlocked")!).isLocationBlocked && 
         <button
           className="bg-joti text-white px-6 py-3 text-center rounded m-5"
           onClick={() => {
@@ -31,6 +32,7 @@ export const Home: FC = () => {
         >
           Meld een vos via locatie
         </button>
+        }
         <button
           className="bg-joti text-white px-6 py-3 text-center rounded m-5"
           onClick={() => {
