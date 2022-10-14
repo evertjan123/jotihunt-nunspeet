@@ -44,17 +44,13 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
         long: Number(urlLong),
         accuracy: 0,
       });
-    }
-  }, []);
-
-  // sync storage and state
-  useEffect(() => {
-    const interval = setInterval(() => {
+      setCurrentLocation(undefined);
+      console.log(currentLocation);
+    } else {
       setCurrentLocation(
         JSON.parse(localStorage.getItem("currentLocation")!) || []
       );
-    }, 1000);
-    return () => clearInterval(interval);
+    }
   }, []);
 
   const getData = async () => {
@@ -64,7 +60,6 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log(event.target.area.value);
     // check if values are filled
     if (event.target.lat.value && event.target.long.value) {
       if (event.target.area.value !== "-1") {
@@ -112,9 +107,9 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               ></path>
             </svg>
             <span className="sr-only">Close modal</span>
@@ -127,20 +122,18 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   {props.manualInput
                     ? "Vul hier je coordinaten in"
                     : urlLocation
-                    ? "Jouwn geslecteerde coordinaten"
-                    : "jouwn live locatie"}
+                    ? "Geslecteerde coordinaten"
+                    : "Je live locatie"}
                 </label>
-                <label>Lat</label>
+                <label className="block mb-2 text-sm font-medium">Lat</label>
                 <input
                   type="input"
                   name="lat"
                   id="lat"
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  className="border mb-2 text-inherit text-sm rounded-lg block w-full p-2.5"
                   value={
-                    props.manualInput
-                      ? ""
-                      : (urlLocation?.lat && urlLocation.lat) ||
-                        (currentLocation && currentLocation.lat)
+                    (currentLocation && currentLocation.lat) ||
+                    (urlLocation && urlLocation.lat)
                   }
                   disabled={
                     props.manualInput
@@ -148,17 +141,15 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                       : (currentLocation || urlLocation) && true
                   }
                 />
-                <label>long</label>
+                <label className="block mb-2 text-sm font-medium">long</label>
                 <input
                   type="input"
                   name="long"
                   id="long"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  className="border text-inherit text-sm rounded-lg block w-full p-2.5"
                   value={
-                    props.manualInput
-                      ? ""
-                      : (urlLocation?.long && urlLocation.long) ||
-                        (currentLocation && currentLocation.long)
+                    (currentLocation && currentLocation.long) ||
+                    (urlLocation && urlLocation.long)
                   }
                   disabled={
                     props.manualInput
@@ -169,9 +160,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
               </div>
 
               <div>
-                <label htmlFor="" className="block mb-2 text-sm font-medium">
-                  Gebied
-                </label>
+                <label className="block mb-2 text-sm font-medium">Gebied</label>
                 <select
                   id="area"
                   className="border text-sm rounded-lg block w-full p-2.5"
@@ -208,6 +197,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   type="input"
                   name="optional_name"
                   id="optional_name"
+                  placeholder="Bijv. HQ"
                   className="border  text-sm rounded-lg block w-full p-2.5"
                 />
               </div>

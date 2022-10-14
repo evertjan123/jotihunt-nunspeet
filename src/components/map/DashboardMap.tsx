@@ -170,7 +170,7 @@ export const DashboardMap: FC = () => {
           </div>
         </div>
       ) : (
-        <div className="sm:w-[1000px] sm:h-[1000px] h-[75vh] w-screen px-2 m-auto">
+        <div className="sm:w-[150vh] sm:h-[85vh] h-[75vh] w-screen px-2 m-auto">
           <MapContainer
             center={[52.131527702721186, 5.849377035198454]}
             zoom={10}
@@ -190,8 +190,8 @@ export const DashboardMap: FC = () => {
                   <div className="flex flex-col text-center">
                     <strong>Dit ben jij</strong>
                     <div>
-                      Lat: {currentLocation.lat.toFixed(4)}, Long:{" "}
-                      {currentLocation.long.toFixed(4)}
+                      Lat: {currentLocation && currentLocation.lat.toFixed(4)},
+                      Long: {currentLocation && currentLocation.long.toFixed(4)}
                     </div>
                     <div>
                       Nauwkeuringheid: {currentLocation.accuracy.toFixed(2)}
