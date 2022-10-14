@@ -22,7 +22,7 @@ export const Home: FC = () => {
         >
           <button>Ga naar kaart</button>
         </a>
-        {!JSON.parse(localStorage.getItem("isLocationBlocked")!).isLocationBlocked && 
+        {(localStorage.getItem("isLocationBlocked") !== null && !JSON.parse(localStorage.getItem("isLocationBlocked")!).isLocationBlocked) && 
         <button
           className="bg-joti text-white px-6 py-3 text-center rounded m-5"
           onClick={() => {
