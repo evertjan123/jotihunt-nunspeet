@@ -1,25 +1,23 @@
-import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FC, useState } from "react";
 
 export const Header: FC = () => {
   const today = new Date();
   const startTime = today.getHours() + ":" + today.getMinutes();
   const [time, setTime] = useState(startTime);
 
-  const history = useNavigate();
-
   //Set the time
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const today = new Date();
-      const mins = ("0" + today.getMinutes()).slice(-2);
-      const time = today.getHours() + ":" + mins;
-      setTime(time);
-    }, 60 * 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  const updateClock = () => {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+
+    const timeString = `${hours}:${minutes}:${seconds}`;
+
+    setTime(timeString);
+  };
+
+  setInterval(updateClock, 1000);
 
   return (
     <header className="sticky top-0 bg-joti">
@@ -28,7 +26,7 @@ export const Header: FC = () => {
           <a className="cursor-pointer text-xl items-center" href="./">
             {"<-"}
           </a>
-          <strong>Jotihunt Nunspeet 2022</strong>
+          <strong>Jotihunt Nunspeet 2023</strong>
           <div>{time}</div>
         </div>
       </div>

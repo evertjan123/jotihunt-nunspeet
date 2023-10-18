@@ -43,3 +43,17 @@ export type Sighting = {
   area: Area;
   created_at: string;
 };
+
+export type Hunter = {
+  id?: number;
+  driver: string;
+  code: string;
+  license_plate: string;
+  lat?: number;
+  long?: number;
+  location_send_at?: string;
+  is_hunting: boolean;
+  is_live: boolean;
+  area_id: number;
+  area?: Area;
+};

@@ -93,3 +93,13 @@ export const foxtrotClubhouseMarker = L.icon({
   iconSize: [20, 36],
   popupAnchor: [0, -10],
 });
+
+/**
+ * CARS
+ */
+
+export const carMarker = L.icon({
+  iconUrl: "https://img.icons8.com/ios-glyphs/30/sedan.png",
+  iconSize: [30, 30],
+  popupAnchor: [0, -10],
+});

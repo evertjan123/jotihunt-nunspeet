@@ -1,15 +1,14 @@
 import { FC, FormEventHandler, useEffect, useState } from "react";
 import { useNavigate, useNavigation } from "react-router-dom";
-import { getAreas, postSighting } from "../../API";
-import { Area, UserLocation } from "../../types";
+import { getAreas, postHunter, postSighting } from "../../API";
+import { Area, Hunter, UserLocation } from "../../types";
 
 interface ISetSigtingModalProps {
   isOpen: boolean;
   onClose: (arg0?: any) => any;
-  manualInput: boolean;
 }
 
-export const SetSightingModal: FC<ISetSigtingModalProps> = (
+export const CreateHunterModal: FC<ISetSigtingModalProps> = (
   props: ISetSigtingModalProps
 ) => {
   const [error, setError] = useState<string>("");
@@ -20,10 +19,6 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
   const [urlLocation, setUrlLocation] = useState<UserLocation | undefined>();
 
   const navigate = useNavigate();
-
-  const queryParams = new URLSearchParams(window.location.search);
-  const urlLat = queryParams.get("lat");
-  const urlLong = queryParams.get("long");
 
   useEffect(() => {
     if (props.isOpen) {
@@ -38,19 +33,6 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
 
   useEffect(() => {
     getData();
-    if (urlLat && urlLong) {
-      setUrlLocation({
-        lat: Number(urlLat),
-        long: Number(urlLong),
-        accuracy: 0,
-      });
-      setCurrentLocation(undefined);
-      console.log(currentLocation);
-    } else {
-      setCurrentLocation(
-        JSON.parse(localStorage.getItem("currentLocation")!) || []
-      );
-    }
   }, []);
 
   const getData = async () => {
@@ -60,27 +42,32 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    // check if values are filled
-    if (event.target.lat.value && event.target.long.value) {
+    if (
+      event.target.name.value ||
+      event.target.code.value ||
+      event.target.licenseplate.value
+    ) {
       if (event.target.area.value !== "-1") {
-        setError("");
-        // create sighting
-        await postSighting({
-          description: event.target.description.value ?? null,
-          lat: event.target.lat.value,
-          long: event.target.long.value,
-          optional_name: event.target.optional_name.value ?? null,
-          hunter_id: null,
+        const hunter: Hunter = {
+          driver: event.target.name.value,
+          code: event.target.code.value,
+          license_plate: event.target.licenseplate.value,
+          is_hunting: false,
+          is_live: true,
           area_id: event.target.area.value,
-        });
-        if (urlLat && urlLong) {
-          navigate("./map");
+        };
+        const valid = await postHunter(hunter);
+        console.log(valid);
+        if (!valid) {
+          setError("Kenteken bestaat al!");
+        } else {
+          props.onClose();
         }
-
-        props.onClose();
       } else {
         setError("Kies een gebied");
       }
+    } else {
+      setError("Vul alles in");
     }
   };
 
@@ -115,50 +102,37 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
             <span className="sr-only">Close modal</span>
           </div>
           <div className="py-6 px-6  lg:px-8">
-            <h3 className="mb-4 text-xl font-medium">Vos gespot?</h3>
+            <h3 className="mb-4 text-xl font-medium">Hunter aanmelden</h3>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block mb-2 text-sm font-medium">
-                  {props.manualInput
-                    ? "Vul hier je coordinaten in"
-                    : urlLocation
-                    ? "Geslecteerde coordinaten"
-                    : "Je live locatie"}
+                  Naam Hunter(s)
                 </label>
-                <label className="block mb-2 text-sm font-medium">Lat</label>
                 <input
                   type="input"
-                  name="lat"
-                  id="lat"
+                  name="name"
+                  id="name"
                   className="border mb-2 text-inherit text-sm rounded-lg block w-full p-2.5"
-                  value={
-                    (currentLocation && currentLocation.lat) ||
-                    (urlLocation && urlLocation.lat)
-                  }
-                  disabled={
-                    props.manualInput
-                      ? false
-                      : (currentLocation || urlLocation) && true
-                  }
                 />
-                <label className="block mb-2 text-sm font-medium">long</label>
+                <label className="block mb-2 text-sm font-medium">
+                  Code (Nodig om jezelf weer in te loggen)
+                </label>
                 <input
                   type="input"
-                  name="long"
-                  id="long"
+                  name="code"
+                  id="code"
                   className="border text-inherit text-sm rounded-lg block w-full p-2.5"
-                  value={
-                    (currentLocation && currentLocation.long) ||
-                    (urlLocation && urlLocation.long)
-                  }
-                  disabled={
-                    props.manualInput
-                      ? false
-                      : (currentLocation || urlLocation) && true
-                  }
+                />
+                <label className="block mb-2 text-sm font-medium">
+                  Kenteken auto
+                </label>
+                <input
+                  type="input"
+                  name="licenseplate"
+                  id="licenseplate"
+                  className="border text-inherit text-sm rounded-lg block w-full p-2.5"
                 />
               </div>
-
               <div>
                 <label className="block mb-2 text-sm font-medium">Gebied</label>
                 <select
@@ -173,41 +147,13 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   })}
                 </select>
               </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium">
-                  Korte beschrijving (Optioneel)
-                </label>
-                <input
-                  type="text"
-                  name="description"
-                  id="description"
-                  className="border pb-5 text-sm rounded-lg block w-full p-2.5"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor=""
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Naam melder (Optioneel)
-                </label>
-                <input
-                  type="input"
-                  name="optional_name"
-                  id="optional_name"
-                  placeholder="Bijv. HQ"
-                  className="border  text-sm rounded-lg block w-full p-2.5"
-                />
-              </div>
               <div className="text-center font-bold	text-joti">{error}</div>
               <div className="text-center">
                 <button
                   type="submit"
                   className="w-3/5 text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
-                  Geef vos aan
+                  Maak hunter aan
                 </button>
               </div>
             </form>

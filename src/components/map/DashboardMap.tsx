@@ -4,6 +4,7 @@ import { UserLocation } from "../../types";
 import { currentLocationMarker } from "./MapIcons";
 import { ClubHouseMarkerLayer } from "./MapMarkerLayers/ClubHouseMarkerLayer";
 import { SightingMarkerLayer } from "./MapMarkerLayers/SightingsMarkerLayer";
+import { HunterMarkerLayer } from "./MapMarkerLayers/HunterMarkerLayer";
 
 export const DashboardMap: FC = () => {
   const [currentLocation, setCurrentLocation] = useState<
@@ -201,7 +202,7 @@ export const DashboardMap: FC = () => {
               </Marker>
             )}
             {showClubHouses && <ClubHouseMarkerLayer />}
-
+            <HunterMarkerLayer />
             <SightingMarkerLayer filters={selectedAreas} />
           </MapContainer>
         </div>

@@ -5,19 +5,32 @@ import { Header } from "./components/Header/Header";
 import { DashboardMap } from "./components/map/DashboardMap";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
+import { updateHunterLocation } from "./API";
+import { UserLocation } from "./types";
 
 function App() {
-  let MINUTE_MS = 1000;
+  let MINUTE_MS = 3000;
 
   useEffect(() => {
     getLocation();
   }, []);
 
   useEffect(() => {
-    // const interval = setInterval(() => {
-    //   getLocation();
-    // }, MINUTE_MS);
-    // return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+    const interval = setInterval(() => {
+      console.log("retrieved location");
+      getLocation();
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (!(Object.keys(user).length === 0)) {
+        const currentLocation: UserLocation =
+          JSON.parse(localStorage.getItem("currentLocation")!) || [];
+        updateHunterLocation(
+          currentLocation.lat,
+          currentLocation.long,
+          user.id
+        );
+      }
+    }, MINUTE_MS);
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
   const getLocation = () => {
