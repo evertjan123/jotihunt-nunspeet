@@ -9,7 +9,7 @@ import { updateHunterLocation } from "./API";
 import { UserLocation } from "./types";
 
 function App() {
-  let MINUTE_MS = 3000;
+  let MINUTE_MS = 5000;
 
   useEffect(() => {
     getLocation();
