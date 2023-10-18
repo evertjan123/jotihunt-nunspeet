@@ -4,7 +4,7 @@ import axios from "axios";
  * GET
  */
 const instance = axios.create({
-  baseURL: "http://jotihunt-nunspeet.nl/api",
+  baseURL: "https://jotihunt-nunspeet.nl/api",
 });
 
 instance.interceptors.request.use(
