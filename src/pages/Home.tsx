@@ -78,24 +78,30 @@ export const Home: FC = () => {
         </a>
         {loggedInUser ? (
           <>
-            <button
-              className="bg-joti text-white px-6 py-3 text-center rounded m-5"
-              onClick={() => {
-                setIsManual(false);
-                setIsSetSightingModalOpen(true);
-              }}
-            >
-              Meld een vos via locatie
-            </button>
-            <button
-              className="bg-joti text-white px-6 py-3 text-center rounded m-5"
-              onClick={() => {
-                setIsManual(true);
-                setIsSetSightingModalOpen(true);
-              }}
-            >
-              Meld een vos handmatig
-            </button>
+            {localStorage.getItem("isLocationBlocked") !== null &&
+              !JSON.parse(localStorage.getItem("isLocationBlocked")!)
+                .isLocationBlocked && (
+                <>
+                  <button
+                    className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+                    onClick={() => {
+                      setIsManual(false);
+                      setIsSetSightingModalOpen(true);
+                    }}
+                  >
+                    Meld een vos via locatie
+                  </button>
+                  <button
+                    className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+                    onClick={() => {
+                      setIsManual(true);
+                      setIsSetSightingModalOpen(true);
+                    }}
+                  >
+                    Meld een vos handmatig
+                  </button>
+                </>
+              )}
             <button
               className="bg-joti text-white px-6 py-3 text-center rounded m-5"
               onClick={() => {

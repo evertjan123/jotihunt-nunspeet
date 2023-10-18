@@ -51,7 +51,14 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
         JSON.parse(localStorage.getItem("currentLocation")!) || []
       );
     }
-  }, []);
+    console.log(props.manualInput)
+    if(props.manualInput){
+      setCurrentLocation(undefined);
+      (document.getElementById("long") as HTMLInputElement).value = "";
+      (document.getElementById("lat") as HTMLInputElement).value = "";
+
+    }
+  }, [props.manualInput]);
 
   const getData = async () => {
     const areas = await getAreas();
@@ -76,6 +83,11 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
         if (urlLat && urlLong) {
           navigate("./map");
         }
+        (document.getElementById("long") as HTMLInputElement).value = "";
+        (document.getElementById("lat") as HTMLInputElement).value = "";
+        (document.getElementById("description") as HTMLInputElement).value = "";
+        (document.getElementById("optional_name") as HTMLInputElement).value = "";
+        (document.getElementById("area") as HTMLInputElement).value = "-1";
 
         props.onClose();
       } else {
@@ -127,7 +139,8 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                 </label>
                 <label className="block mb-2 text-sm font-medium">Lat</label>
                 <input
-                  type="input"
+                  type="number" 
+                  step="0.00000000001"                    
                   name="lat"
                   id="lat"
                   className="border mb-2 text-inherit text-sm rounded-lg block w-full p-2.5"
@@ -140,10 +153,12 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                       ? false
                       : (currentLocation || urlLocation) && true
                   }
+                  required
                 />
                 <label className="block mb-2 text-sm font-medium">long</label>
                 <input
-                  type="input"
+                  type="number" 
+                  step="0.00000000001"                   
                   name="long"
                   id="long"
                   className="border text-inherit text-sm rounded-lg block w-full p-2.5"
@@ -156,6 +171,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                       ? false
                       : (currentLocation || urlLocation) && true
                   }
+                  required
                 />
               </div>
 

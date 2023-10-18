@@ -51,9 +51,17 @@ function App() {
               updated_At: position.timestamp,
             })
           );
+          window.localStorage.setItem(
+            "isLocationBlocked",
+            JSON.stringify({ isLocationBlocked: false })
+          );
         },
         (error) => {
           console.log(error);
+          window.localStorage.setItem(
+            "isLocationBlocked",
+            JSON.stringify({ isLocationBlocked: true })
+          );
         },
         { enableHighAccuracy: true }
       );

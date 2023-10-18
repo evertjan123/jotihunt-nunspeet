@@ -182,7 +182,7 @@ export const DashboardMap: FC = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {currentLocation && (
+            {(currentLocation?.lat && currentLocation?.long) && (
               <Marker
                 icon={currentLocationMarker}
                 position={[currentLocation?.lat, currentLocation?.long]}
@@ -191,11 +191,11 @@ export const DashboardMap: FC = () => {
                   <div className="flex flex-col text-center">
                     <strong>Dit ben jij</strong>
                     <div>
-                      Lat: {currentLocation && currentLocation.lat.toFixed(4)},
-                      Long: {currentLocation && currentLocation.long.toFixed(4)}
+                      Lat: {currentLocation.lat && currentLocation.lat.toFixed(4)},
+                      Long: {currentLocation.long && currentLocation.long.toFixed(4)}
                     </div>
                     <div>
-                      Nauwkeuringheid: {currentLocation.accuracy.toFixed(2)}
+                      Nauwkeuringheid: {currentLocation.accuracy && currentLocation.accuracy.toFixed(2)}
                     </div>
                   </div>
                 </Popup>
