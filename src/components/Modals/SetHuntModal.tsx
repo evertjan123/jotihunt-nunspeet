@@ -31,15 +31,14 @@ export const SetHuntModal: FC<ISetHuntModal> = (props: ISetHuntModal) => {
       if (!(Object.keys(user).length === 0)) {
         const id = user.id
         const formData = new FormData();
-        console.log(event);
         formData.append('image', event.target.elements['image'].files[0]);
         formData.append('code', event.target.code.value);
         formData.append('time', event.target.time.value);
         formData.append('area_id', user.area_id);
 
         const data = await postHunt(formData, id);
-        if (!data) {
-          setError("Code aanmaken mislukt");
+        if (!data.success) {
+          setError(data.data);
         } else {
           props.onClose();
         }

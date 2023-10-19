@@ -108,7 +108,7 @@ export const loginHunter = async (body: any) => {
 export const postHunt = async (body: any, id: number) => {
   const response = await instance.post(`/hunts/${id}`, body);
   if (response.status === 200) {
-    return response.data.data;
+    return response.data;
   }
 }
 
