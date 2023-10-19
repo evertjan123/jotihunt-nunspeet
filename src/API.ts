@@ -55,6 +55,17 @@ export const getAllHunters = async () => {
   }
 };
 
+export const getAllHunts = async () => {
+  const response = await instance.get("/hunts");
+  if (response.status === 200) {
+    return response.data.data;
+  }
+}
+
+
+export const downloadImage = async (id: number, secret: string) => {
+  return instance.get(`/hunts/${id}/download?secret=${secret}`,  {responseType: 'blob'} );
+}
 export const deleteSighting = async (id: number) => {
   const response = await instance.delete("/sightings/" + id);
   if (response.status === 200) {
@@ -93,6 +104,13 @@ export const loginHunter = async (body: any) => {
     return false;
   }
 };
+
+export const postHunt = async (body: any, id: number) => {
+  const response = await instance.post(`/hunts/${id}`, body);
+  if (response.status === 200) {
+    return response.data.data;
+  }
+}
 
 /**
  * PATCH

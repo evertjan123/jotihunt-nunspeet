@@ -22,6 +22,7 @@ export const HunterMarkerLayer: FC = () => {
 
   const getData = async () => {
     const hunters = await getAllHunters();
+    console.log(hunters);
     setHunters(hunters);
   };
 
@@ -29,25 +30,26 @@ export const HunterMarkerLayer: FC = () => {
     <>
       {hunters.map((hunter) => {
         let marker = carMarker;
-        console.log(hunter);
-        return (
-          <Marker icon={marker} position={[hunter.lat || 0, hunter.long || 0]}>
-            <Popup>
-              <div className="flex flex-col text-center">
-                <div className="pb-2">
-                  <strong>{hunter.driver}</strong>
-                  <div>
-                    {hunter.location_send_at
-                      ? `Laatst locatie geupdate ${hunter.location_send_at}`
-                      : "Geen locatie informatie beschikbaar"}{" "}
+        if (hunter.location_send_at && hunter.is_hunting) {
+          return (
+              <Marker icon={marker} position={[hunter.lat || 0, hunter.long || 0]}>
+                <Popup>
+                  <div className="flex flex-col text-center">
+                    <div className="pb-2">
+                      <strong>{hunter.driver}</strong>
+                      <div>
+                        {hunter.location_send_at
+                            ? `Laatst locatie geupdate ${hunter.location_send_at}`
+                            : "Geen locatie informatie beschikbaar"}{" "}
+                      </div>
+                      <hr className="m-2"/>
+                      <div>Hunt momenteel in {hunter.area?.name}</div>
+                    </div>
                   </div>
-                  <hr className="m-2" />
-                  <div>Hunt momenteel in {hunter.area?.name}</div>
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        );
+                </Popup>
+              </Marker>
+          );
+        }
       })}
     </>
   );

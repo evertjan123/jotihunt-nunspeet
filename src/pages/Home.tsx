@@ -4,6 +4,7 @@ import { SetSightingModal } from "../components/Modals/SetSightingModal";
 import { LoginModal } from "../components/Modals/LoginModal";
 import { Area, Hunter } from "../types";
 import { getAreas, updateHunterStatus } from "../API";
+import {SetHuntModal} from "../components/Modals/SetHuntModal";
 
 export const Home: FC = () => {
   const [isSetSightingModalOpen, setIsSetSightingModalOpen] =
@@ -11,6 +12,7 @@ export const Home: FC = () => {
   const [isCreateHunterModalOpen, setIsCreateHunterModalOpen] =
     useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isSetHuntModalOpen, setIsSetHuntModalOpen] = useState<boolean>(false);
   const [isManuel, setIsManual] = useState<boolean>(false);
   const [loggedInUser, setLoggedInUser] = useState<Hunter>();
   const [areas, setAreas] = useState<Area[]>([]);
@@ -100,6 +102,14 @@ export const Home: FC = () => {
                   >
                     Meld een vos handmatig
                   </button>
+                  <button
+                      className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+                      onClick={() => {
+                        setIsSetHuntModalOpen(true);
+                      }}
+                  >
+                    Geef hunt door
+                  </button>
                 </>
               )}
             <button
@@ -178,6 +188,10 @@ export const Home: FC = () => {
         <LoginModal
           isOpen={isLoginModalOpen}
           onClose={() => setIsLoginModalOpen(false)}
+        />
+        <SetHuntModal
+            isOpen={isSetHuntModalOpen}
+            onClose={() => setIsSetHuntModalOpen(false)}
         />
       </div>
     </>

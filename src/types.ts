@@ -57,3 +57,16 @@ export type Hunter = {
   area_id: number;
   area?: Area;
 };
+
+export type Hunt = {
+  id?: number,
+  code: string,
+  area_id: number,
+  hunter_id: number,
+  hunter?: Hunter,
+  area?: Area,
+  created_at: string,
+  time: string,
+  path_to_photo? : string,
+
+}

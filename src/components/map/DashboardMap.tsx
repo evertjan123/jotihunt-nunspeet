@@ -29,16 +29,6 @@ export const DashboardMap: FC = () => {
 
   return (
     <>
-      <div className="text-center">
-        <button
-          className="bg-joti px-6 py-3 text-white text-center w-3/5 rounded-lg my-1"
-          onClick={() => {
-            setIsFilterOpen(!isFilterOpen);
-          }}
-        >
-          {isFilterOpen ? "Sluit f" : "F"}ilters
-        </button>
-      </div>
       {isFilterOpen ? (
         <div className="pl-5 pt-10">
           <div className="flex items-center mb-4">
@@ -171,7 +161,7 @@ export const DashboardMap: FC = () => {
           </div>
         </div>
       ) : (
-        <div className="sm:w-[150vh] sm:h-[85vh] h-[75vh] w-screen px-2 m-auto">
+        <div className="sm:w-[150vh] sm:h-[85vh] h-[75vh] w-screen mt-12">
           <MapContainer
             center={[52.131527702721186, 5.849377035198454]}
             zoom={10}

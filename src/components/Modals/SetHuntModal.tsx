@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginHunter } from "../../API";
+import {loginHunter, postHunt} from "../../API";
 import { UserLocation } from "../../types";
 
-interface ILoginModalProps {
+interface ISetHuntModal {
   isOpen: boolean;
   onClose: (arg0?: any) => any;
 }
 
-export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
+export const SetHuntModal: FC<ISetHuntModal> = (props: ISetHuntModal) => {
   const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
@@ -26,18 +26,23 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (event.target.code.value || event.target.licenseplate.value) {
-      const hunter = {
-        code: event.target.code.value,
-        license_plate: event.target.licenseplate.value,
-      };
-      const data = await loginHunter(hunter);
-      if (!data) {
-        setError("Inloggen mislukt!");
-      } else {
-        localStorage.setItem("user", JSON.stringify(data.data));
-        localStorage.setItem("userToken", JSON.stringify(data.token));
-        props.onClose();
+    if (event.target.code.value) {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (!(Object.keys(user).length === 0)) {
+        const id = user.id
+        const formData = new FormData();
+        console.log(event);
+        formData.append('image', event.target.elements['image'].files[0]);
+        formData.append('code', event.target.code.value);
+        formData.append('time', event.target.time.value);
+        formData.append('area_id', user.area_id);
+
+        const data = await postHunt(formData, id);
+        if (!data) {
+          setError("Code aanmaken mislukt");
+        } else {
+          props.onClose();
+        }
       }
     } else {
       setError("Vul alles in");
@@ -75,8 +80,8 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
             <span className="sr-only">Close modal</span>
           </div>
           <div className="py-6 px-6  lg:px-8">
-            <h3 className="mb-4 text-xl font-medium">Inloggen hunter</h3>
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <h3 className="mb-4 text-xl font-medium">Geef een hunt door aan HQ</h3>
+            <form className="space-y-6" onSubmit={handleSubmit} encType="multipart/form-data">
               <div>
                 <label className="block mb-2 text-sm font-medium">Code</label>
                 <input
@@ -85,15 +90,19 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
                   id="code"
                   className="border text-inherit text-sm rounded-lg block w-full p-2.5"
                 />
-                <label className="block mb-2 text-sm font-medium">
-                  Kenteken auto
-                </label>
+              </div>
+              <div>
+                <label className="block mb-2 text-sm font-medium">Tijd</label>
                 <input
-                  type="input"
-                  name="licenseplate"
-                  id="licenseplate"
-                  className="border text-inherit text-sm rounded-lg block w-full p-2.5"
+                    type="input"
+                    name="time"
+                    id="time"
+                    className="border text-inherit text-sm rounded-lg block w-full p-2.5"
                 />
+              </div>
+              <div>
+                <label className="block mb-2 text-sm font-medium">Foto</label>
+                <input type="file" name="image" accept="image/*" capture="environment"/>
               </div>
               <div className="text-center font-bold	text-joti">{error}</div>
               <div className="text-center">
@@ -101,7 +110,7 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
                   type="submit"
                   className="w-3/5 text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
-                  Login
+                  Code doorgeven
                 </button>
               </div>
             </form>

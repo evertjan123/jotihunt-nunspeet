@@ -1,14 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginHunter } from "../../API";
+import {downloadImage, loginHunter} from "../../API";
 import { UserLocation } from "../../types";
 
-interface ILoginModalProps {
+interface IDownloadConfirmModalProps {
   isOpen: boolean;
   onClose: (arg0?: any) => any;
+  huntID: number
 }
 
-export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
+export const DownloadConfirmModal: FC<IDownloadConfirmModalProps> = (props: IDownloadConfirmModalProps) => {
   const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
@@ -26,19 +27,15 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (event.target.code.value || event.target.licenseplate.value) {
-      const hunter = {
-        code: event.target.code.value,
-        license_plate: event.target.licenseplate.value,
-      };
-      const data = await loginHunter(hunter);
-      if (!data) {
-        setError("Inloggen mislukt!");
-      } else {
-        localStorage.setItem("user", JSON.stringify(data.data));
-        localStorage.setItem("userToken", JSON.stringify(data.token));
-        props.onClose();
-      }
+    if (event.target.key.value ) {
+      downloadImage(props.huntID, event.target.key.value).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'downloaded_file.png');
+        document.body.appendChild(link);
+        link.click();
+      });
     } else {
       setError("Vul alles in");
     }
@@ -48,7 +45,7 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
     <div
       className={`${
         props.isOpen ? "absolute" : "hidden"
-      } left-0 top-0 right-0 mb-screen overflow-hidden bg-[#AAAAAA80] bottom-0 h-full h-screen w-full`}
+      } left-0 top-0 right-0 mb-screen overflow-hidden bg-[#AAAAAA80] z-1 bottom-0 h-full h-screen w-full`}
     >
       <div className="relative p-4 w-full max-w-md h-full md:h-auto flex flex-col bg-bg_main m-auto py-5 px-5 rounded">
         <div className="relative rounded-lg  !z-40 shadow bg-gray">
@@ -75,24 +72,16 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
             <span className="sr-only">Close modal</span>
           </div>
           <div className="py-6 px-6  lg:px-8">
-            <h3 className="mb-4 text-xl font-medium">Inloggen hunter</h3>
+            <h3 className="mb-4 text-xl font-medium">Downloaden foto</h3>
+            <h2>Voer de geheime sleutel in:</h2>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label className="block mb-2 text-sm font-medium">Code</label>
+                <label className="block mb-2 text-sm font-medium">Sleutel</label>
                 <input
-                  type="input"
-                  name="code"
-                  id="code"
-                  className="border text-inherit text-sm rounded-lg block w-full p-2.5"
-                />
-                <label className="block mb-2 text-sm font-medium">
-                  Kenteken auto
-                </label>
-                <input
-                  type="input"
-                  name="licenseplate"
-                  id="licenseplate"
-                  className="border text-inherit text-sm rounded-lg block w-full p-2.5"
+                  type="password"
+                  name="key"
+                  id="key"
+                  className="border text-joti text-sm rounded-lg block w-full p-2.5"
                 />
               </div>
               <div className="text-center font-bold	text-joti">{error}</div>
@@ -101,7 +90,7 @@ export const LoginModal: FC<ILoginModalProps> = (props: ILoginModalProps) => {
                   type="submit"
                   className="w-3/5 text-white bg-joti font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
-                  Login
+                  Download
                 </button>
               </div>
             </form>

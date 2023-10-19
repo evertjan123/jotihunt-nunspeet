@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components/Header/Header";
-import { DashboardMap } from "./components/map/DashboardMap";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
 import { updateHunterLocation } from "./API";
 import { UserLocation } from "./types";
+import { MapOverview } from "./pages/MapOverview";
 
 function App() {
-  let MINUTE_MS = 5000;
+  let MINUTE_MS = 10000;
 
   useEffect(() => {
     getLocation();
@@ -76,7 +76,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/map" element={<DashboardMap />} />
+        <Route path="/map" element={<MapOverview />} />
         <Route path="dashboard" element={<Dashboard />} />
       </Routes>
     </>
