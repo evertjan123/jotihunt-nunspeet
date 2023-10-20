@@ -30,7 +30,7 @@ export const SightingMarkerLayer: FC<ISightingMarkerLayerProps> = (
     getData();
   }, []);
 
-  let MINUTE_MS = 8000;
+  let MINUTE_MS = 20000;
 
   useEffect(() => {
     const interval = setInterval(() => {

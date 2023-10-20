@@ -22,7 +22,7 @@ export const AreasOverview: FC = () => {
 		getData()
 	}, []);
 
-	let MINUTE_MS = 40000;
+	let MINUTE_MS = 240000;
 
 	useEffect(() => {
 		const interval = setInterval(() => {

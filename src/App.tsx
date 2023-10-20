@@ -9,7 +9,7 @@ import { UserLocation } from "./types";
 import { MapOverview } from "./pages/MapOverview";
 
 function App() {
-  let MINUTE_MS = 10000;
+  let MINUTE_MS = 20000;
 
   useEffect(() => {
     getLocation();

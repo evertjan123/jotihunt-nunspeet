@@ -19,7 +19,7 @@ export const ClubHouseMarkerLayer: FC = () => {
     getData();
   }, []);
 
-  let MINUTE_MS = 20000;
+  let MINUTE_MS = 5000000;
 
   useEffect(() => {
     const interval = setInterval(() => {
