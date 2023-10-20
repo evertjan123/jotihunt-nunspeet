@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from "react";
-import { Marker, Popup } from "react-leaflet";
+import React, { FC, useEffect, useState } from "react";
+import {Circle, Marker, Popup} from "react-leaflet";
 import { getClubhouses } from "../../../API";
 import { Clubhouse } from "../../../types";
 import {
@@ -37,27 +37,36 @@ export const ClubHouseMarkerLayer: FC = () => {
     <>
       {clubhouses.map((home) => {
         let marker = betaSightingMarker;
+        let circle;
         switch (home.area) {
           case "Alpha":
             marker = alphaClubhouseMarker;
+            circle = "green";
             break;
           case "Bravo":
             marker = betaClubhouseMarker;
+            circle = "purple";
             break;
           case "Charlie":
             marker = charlieClubhouseMarker;
+            circle = "orange";
             break;
           case "Delta":
             marker = deltaClubhouseMarker;
+            circle = "yellow";
             break;
           case "Echo":
             marker = echoClubhouseMarker;
+            circle = "purple";
             break;
           case "Foxtrot":
             marker = foxtrotClubhouseMarker;
+            circle = "blue";
             break;
         }
         return (
+            <>
+              <Circle center={[home.lat, home.long]} radius={500} color={circle} />
           <Marker icon={marker} position={[home.lat, home.long]}>
             <Popup>
               <div className="flex flex-col text-center">
@@ -84,6 +93,7 @@ export const ClubHouseMarkerLayer: FC = () => {
               </div>
             </Popup>
           </Marker>
+            </>
         );
       })}
     </>

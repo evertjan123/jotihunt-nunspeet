@@ -102,16 +102,16 @@ export const Home: FC = () => {
                   >
                     Meld een vos handmatig
                   </button>
-                  <button
-                      className="bg-joti text-white px-6 py-3 text-center rounded m-5"
-                      onClick={() => {
-                        setIsSetHuntModalOpen(true);
-                      }}
-                  >
-                    Geef hunt door
-                  </button>
                 </>
               )}
+            <button
+                className="bg-joti text-white px-6 py-3 text-center rounded m-5"
+                onClick={() => {
+                  setIsSetHuntModalOpen(true);
+                }}
+            >
+              Geef hunt door
+            </button>
             <button
               className="bg-joti text-white px-6 py-3 text-center rounded m-5"
               onClick={() => {

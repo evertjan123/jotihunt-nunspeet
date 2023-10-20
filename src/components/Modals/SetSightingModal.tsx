@@ -70,6 +70,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
     // check if values are filled
     if (event.target.lat.value && event.target.long.value) {
       if (event.target.area.value !== "-1") {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
         setError("");
         // create sighting
         await postSighting({
@@ -77,7 +78,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
           lat: event.target.lat.value,
           long: event.target.long.value,
           optional_name: event.target.optional_name.value ?? null,
-          hunter_id: null,
+          hunter_id: (!(Object.keys(user).length === 0)) ? user.id : null,
           area_id: event.target.area.value,
         });
         if (urlLat && urlLong) {
@@ -139,8 +140,8 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                 </label>
                 <label className="block mb-2 text-sm font-medium">Lat</label>
                 <input
-                  type="number" 
-                  step="0.00000000001"                    
+                  type="number"
+                  step="0.00000000001"
                   name="lat"
                   id="lat"
                   className="border mb-2 text-inherit text-sm rounded-lg block w-full p-2.5"
@@ -157,8 +158,8 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                 />
                 <label className="block mb-2 text-sm font-medium">long</label>
                 <input
-                  type="number" 
-                  step="0.00000000001"                   
+                  type="number"
+                  step="0.00000000001"
                   name="long"
                   id="long"
                   className="border text-inherit text-sm rounded-lg block w-full p-2.5"
@@ -199,22 +200,6 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
                   name="description"
                   id="description"
                   className="border pb-5 text-sm rounded-lg block w-full p-2.5"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor=""
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Naam melder (Optioneel)
-                </label>
-                <input
-                  type="input"
-                  name="optional_name"
-                  id="optional_name"
-                  placeholder="Bijv. HQ"
-                  className="border  text-sm rounded-lg block w-full p-2.5"
                 />
               </div>
               <div className="text-center font-bold	text-joti">{error}</div>

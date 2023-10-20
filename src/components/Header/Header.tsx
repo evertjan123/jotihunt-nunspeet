@@ -23,7 +23,7 @@ export const Header: FC = () => {
     <header className="sticky top-0 bg-joti">
       <div className="p-3 lg:px-24">
         <div className="flex place-content-between text-white">
-          <a className="cursor-pointer text-xl items-center" href="./">
+          <a className="cursor-pointer text-xl items-center" href="/">
             {"<-"}
           </a>
           <strong>Jotihunt Nunspeet 2023</strong>

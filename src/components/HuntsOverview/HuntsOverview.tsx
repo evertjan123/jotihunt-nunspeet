@@ -6,6 +6,7 @@ import {DownloadConfirmModal} from "../Modals/DownloadConfirmModal";
 export const HuntsOverview: FC = () => {
 	const [hunts, setHunts] = useState<Hunt[]>();
 	const [isDownloadModalOpen, setIsDownloadModalOpen] = useState<boolean>(false);
+	const [modalHuntId, setModalHuntID] = useState<number>();
 
 
 	useEffect(() => {
@@ -58,15 +59,13 @@ export const HuntsOverview: FC = () => {
 								<hr/>
 									<button
 										className="text-white bg-gray font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center"
-										onClick={() => setIsDownloadModalOpen(true)}
+										onClick={() => {
+											setModalHuntID(hunt.id);
+											setIsDownloadModalOpen(true);
+										}}
 									>
 										Download foto
 									</button>
-									<DownloadConfirmModal
-										isOpen={isDownloadModalOpen}
-										onClose={() => setIsDownloadModalOpen(false)}
-										huntID={hunt.id!}
-										/>
 								</>
 
 							)}
@@ -75,6 +74,11 @@ export const HuntsOverview: FC = () => {
 					)
 				})}
 			</div>
+			<DownloadConfirmModal
+				isOpen={isDownloadModalOpen}
+				onClose={() => setIsDownloadModalOpen(false)}
+				huntID={modalHuntId!}
+			/>
 		</div>
 );
 };
