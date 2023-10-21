@@ -66,7 +66,7 @@ export const ClubHouseMarkerLayer: FC = () => {
         }
         return (
             <>
-              <Circle center={[home.lat, home.long]} radius={500} color={circle} />
+              <Circle center={[home.lat, home.long]} radius={450} color={circle} />
           <Marker icon={marker} position={[home.lat, home.long]}>
             <Popup>
               <div className="flex flex-col text-center">
