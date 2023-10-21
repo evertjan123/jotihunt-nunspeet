@@ -77,7 +77,7 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
           description: event.target.description.value ?? null,
           lat: event.target.lat.value,
           long: event.target.long.value,
-          optional_name: event.target.optional_name.value ?? null,
+          optional_name: null,
           hunter_id: (!(Object.keys(user).length === 0)) ? user.id : null,
           area_id: event.target.area.value,
         });
@@ -87,7 +87,6 @@ export const SetSightingModal: FC<ISetSigtingModalProps> = (
         (document.getElementById("long") as HTMLInputElement).value = "";
         (document.getElementById("lat") as HTMLInputElement).value = "";
         (document.getElementById("description") as HTMLInputElement).value = "";
-        (document.getElementById("optional_name") as HTMLInputElement).value = "";
         (document.getElementById("area") as HTMLInputElement).value = "-1";
 
         props.onClose();
