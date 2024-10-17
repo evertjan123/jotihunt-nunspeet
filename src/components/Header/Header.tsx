@@ -26,7 +26,7 @@ export const Header: FC = () => {
           <a className="cursor-pointer text-xl items-center" href="/">
             {"<-"}
           </a>
-          <strong>Jotihunt Nunspeet 2023</strong>
+          <strong>Jotihunt Nunspeet 2024</strong>
           <div>{time}</div>
         </div>
       </div>
